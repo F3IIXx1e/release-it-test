@@ -78,12 +78,10 @@ module.exports = {
                 // 规定在 changelog 中显示的日期格式
                 formatDate: date => {
                     const d = new Date(date)
-                    const dayEnum = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
                     const Y = d.getFullYear()
                     const M = String(d.getMonth() + 1).padStart(2, '0')
                     const D = String(d.getDate()).padStart(2, '0')
-                    const dd = dayEnum[d.getDay()]
-                    return `${Y}/${M}/${D} ${dd}`
+                    return `${Y}/${M}/${D}`
                 },
                 transform: commit => {
                     const internalCommit = { ...commit }
