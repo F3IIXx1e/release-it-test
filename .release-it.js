@@ -1,3 +1,8 @@
+const { execSync } = require('node:child_process')
+
+const branchEnv = process.env.GITHUB_REF_NAME || process.env.CI_COMMIT_REF_NAME || process.env.BRANCH_NAME
+const branch = branchEnv || execSync('git branch --show-current').toString().trim()
+const preId = branch === 'dev' ? 'dev' : branch === 'test' ? 'rc' : ''
 const __header_pattern__ = new RegExp(/^(:\w+:)\s+(\w+)\((\w+)\):\s+(.+)$/)
 
 /**
@@ -16,7 +21,8 @@ module.exports = {
         publish: false
     },
     github: {
-        release: true
+        release: true,
+        preRelease: !!preId
     },
     plugins: {
         '@release-it/conventional-changelog': {
