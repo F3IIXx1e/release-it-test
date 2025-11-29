@@ -31,14 +31,12 @@ module.exports = {
                     { type: 'feat', section: '✨ New Features | 功能新增' },
                     { type: 'fix', section: '🐛 Bug Fixes | 问题修复' },
                     { type: 'refactor', section: '♻️ Code Refactor | 代码重构' },
-                    { type: 'perf', section: '⚡ Improve Performance | 性能优化' },
-                    { type: 'revert', section: '⏪ Revert Changes | 版本回退' }
+                    { type: 'perf', section: '⚡ Improve Performance | 性能优化' }
                 ]
             },
             whatBump: commits => {
                 let level = 2
                 let breakings = 0
-                let revert = 0
                 let features = 0
                 let bugfixes = 0
 
@@ -47,10 +45,6 @@ module.exports = {
                     const commitType = match ? match[2] : undefined
                     if (commit.notes.length > 0) {
                         breakings += commit.notes.length
-                        level = 0
-                    }
-                    else if (commitType === 'revert') {
-                        revert += 1
                         level = 0
                     }
                     else if (commitType === 'feat') {
