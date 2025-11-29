@@ -103,7 +103,7 @@ module.exports = {
                     internalCommit.scopeName = scopeEntries[scope] || scopeEntries['others']
                     return internalCommit
                 },
-                headerPartial: '## [{{version}}]{{~#if title}} {{title}}{{~/if}} - {{date}}\n',
+                headerPartial: '## :bookmark: [{{version}}] - {{date}}\n',
                 commitPartial: '- {{gitmoji}} {{subject}} {{~#if hash}} {{#if @root.linkReferences~}}([{{shortHash}}]({{~#if @root.repository}}{{~#if @root.host}}{{~@root.host}}/{{/if}}{{~#if @root.owner}}{{~@root.owner}}/{{/if}}{{~@root.repository}}/commit/{{hash}}{{~else}}{{~#if @root.repoUrl}}{{~@root.repoUrl}}/commit/{{hash}}{{~/if}}{{~/if}})){{~else}} {{~shortHash}}{{~/if}}{{~/if}}\n'
             }
         }
