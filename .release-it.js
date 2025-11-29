@@ -3,7 +3,7 @@ const { execSync } = require('node:child_process')
 const branchEnv = process.env.GITHUB_REF_NAME || process.env.CI_COMMIT_REF_NAME || process.env.BRANCH_NAME
 const branch = branchEnv || execSync('git branch --show-current').toString().trim()
 const preId = branch === 'dev' ? 'dev' : branch === 'test' ? 'rc' : ''
-const __header_pattern__ = new RegExp(/^(:\w+:)\s+(\w+)\((\w+)\):\s+(.+)$/)
+const headerPattern = new RegExp(/^(:\w+:)\s+(\w+)\((\w+)\):\s+(.+)$/)
 
 /**
  * @type {import('release-it').Config}
@@ -48,7 +48,7 @@ module.exports = {
                 let bugfixes = 0
 
                 commits.forEach((commit) => {
-                    const match = __header_pattern__.exec(commit.header)
+                    const match = headerPattern.exec(commit.header)
                     const commitType = match ? match[2] : undefined
                     if (commit.notes.length > 0) {
                         breakings += commit.notes.length
@@ -86,7 +86,7 @@ module.exports = {
                 },
                 transform: commit => {
                     const internalCommit = { ...commit }
-                    const [_, gitmoji, type, scope, subject] = __header_pattern__.exec(commit.header)
+                    const [_, gitmoji, type, scope, subject] = headerPattern.exec(commit.header)
                     if (!['feat','fix','refactor','perf'].includes(type)) return false
                     // 对应 commitlint 配置中的 scopes
                     const scopes = [
