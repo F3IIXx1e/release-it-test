@@ -88,7 +88,7 @@ module.exports = {
                 transform: commit => {
                     const internalCommit = { ...commit }
                     const [_, gitmoji, type, scope, subject] = __header_pattern__.exec(commit.header)
-                    if (!['feat','fix','refactor','perf','revert'].includes(type)) return false
+                    if (!['feat','fix','refactor','perf'].includes(type)) return false
                     // 对应 commitlint 配置中的 scopes
                     const scopes = [
                         ['root', ':file_folder: 根目录'],
