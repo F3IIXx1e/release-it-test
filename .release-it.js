@@ -41,9 +41,10 @@ module.exports = {
                 let revert = 0
                 let features = 0
                 let bugfixes = 0
-                
+
                 commits.forEach((commit) => {
-                    const [,,commitType,,] = __header_pattern__.exec(commit.header)
+                    const match = __header_pattern__.exec(commit.header)
+                    const commitType = match ? match[2] : undefined
                     if (commit.notes.length > 0) {
                         breakings += commit.notes.length
                         level = 0
@@ -54,7 +55,6 @@ module.exports = {
                     }
                     else if (commitType === 'feat') {
                         features += 1
-
                         if (level === 2) {
                             level = 1
                         }
@@ -85,23 +85,30 @@ module.exports = {
                     return `${Y}/${M}/${D} ${dd}`
                 },
                 transform: (commit, context, options) => {
+                    const match = __header_pattern__.exec(commit.header)
+                    if (!match) return false
                     const internalCommit = { ...commit }
-                    const [_, gitmoji, type, scope, subject] = __header_pattern__.exec(commit.header)
+                    // const [_, gitmoji, type, scope, subject] = __header_pattern__.exec(commit.header)
                     // 对应 commitlint 配置中的 scopes
+                    const gitmoji = match[1]
+                    const type = match[2]
+                    const scope = match[3]
+                    const subject = match[4]
+                    const allowed = new Set(['feat','fix','refactor','perf','revert'])
+                    if (!allowed.has(type)) return false
                     const scopes = [
-                        ['root', ':file_folder: 根目录'], // :file_folder: 📁
-                        ['web', ':laptop: 前端应用'], // :laptop: 💻
-                        ['server', ':gear: 后端应用'], // :gear: ⚙️
-                        ['others', ':briefcase: 其他杂项'] // :briefcase: 💼
+                        ['root', ':file_folder: 根目录'],
+                        ['web', ':laptop: 前端应用'],
+                        ['server', ':gear: 后端应用'],
+                        ['others', ':briefcase: 其他杂项']
                     ]
-                    internalCommit.gitmoji= gitmoji
-                    internalCommit.type= type
-                    internalCommit.scope= scope
-                    internalCommit.subject= subject
+                    internalCommit.gitmoji = gitmoji
+                    internalCommit.type = type
+                    internalCommit.scope = scope
+                    internalCommit.subject = subject
                     internalCommit.shortHash = String(internalCommit.hash).slice(0, 7)
                     const scopeEntries = Object.fromEntries(scopes)
                     internalCommit.scopeName = scopeEntries[scope] || scopeEntries['others']
-
                     return internalCommit
                 },
                 headerPartial: '## [{{version}}]{{~#if title}} {{title}}{{~/if}} - {{date}}\n',
