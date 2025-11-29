@@ -9,9 +9,11 @@ const __header_pattern__ = new RegExp(/^(:\w+:)\s+(\w+)\((\w+)\):\s+(.+)$/)
  * @type {import('release-it').Config}
  */
 module.exports = {
+    // 设置预发布后缀显示
+    preRelease: preId || false,
     git: {
         tagName: 'v${version}',
-        commitMessage: ':bookmark: chore(release): release v${version} [skip ci]',
+        commitMessage: ':bookmark: chore(release): 发布版本 v${version}',
         assets: ['CHANGELOG.md'],
         requireCleanWorkingDir: false,
         // 只允许 main dev test 分支提交时执行
@@ -22,7 +24,6 @@ module.exports = {
     },
     github: {
         release: true,
-        preRelease: !!preId
     },
     plugins: {
         '@release-it/conventional-changelog': {
