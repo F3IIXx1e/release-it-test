@@ -74,6 +74,7 @@ module.exports = {
             writerOpts: {
                 groupBy: 'scopeName',
                 commitsSort: ['type', 'subject'],
+                linkReferences: true,
                 // 规定在 changelog 中显示的日期格式
                 formatDate: date => {
                     const d = new Date(date)
@@ -112,7 +113,7 @@ module.exports = {
                     return internalCommit
                 },
                 headerPartial: '## [{{version}}]{{~#if title}} {{title}}{{~/if}} - {{date}}\n',
-                commitPartial: '- {{gitmoji}} {{type}}: {{subject}} ([{{shortHash}}]({{~@root.host}}/{{#if this.owner}}{{~this.owner}}{{else}}{{~@root.owner}}{{/if}}/{{#if this.repository}}{{~this.repository}}{{else}}{{~@root.repository}}{{/if}}/commit/{{hash}}))\n'
+                commitPartial: '- {{gitmoji}} {{type}}: {{subject}} {{~#if hash}} {{#if @root.linkReferences~}}([{{shortHash}}]({{~#if @root.repository}}{{~#if @root.host}}{{~@root.host}}/{{/if}}{{~#if @root.owner}}{{~@root.owner}}/{{/if}}{{~@root.repository}}/commit/{{hash}}{{~else}}{{~#if @root.repoUrl}}{{~@root.repoUrl}}/commit/{{hash}}{{~/if}}{{~/if}})){{~else}} {{~shortHash}}{{~/if}}{{~/if}}\n'
             }
         }
     }
