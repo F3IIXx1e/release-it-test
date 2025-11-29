@@ -85,18 +85,11 @@ module.exports = {
                     const dd = dayEnum[d.getDay()]
                     return `${Y}/${M}/${D} ${dd}`
                 },
-                transform: (commit, context, options) => {
-                    const match = __header_pattern__.exec(commit.header)
-                    if (!match) return false
+                transform: commit => {
                     const internalCommit = { ...commit }
-                    // const [_, gitmoji, type, scope, subject] = __header_pattern__.exec(commit.header)
+                    const [_, gitmoji, type, scope, subject] = __header_pattern__.exec(commit.header)
+                    if (!['feat','fix','refactor','perf','revert'].includes(type)) return false
                     // 对应 commitlint 配置中的 scopes
-                    const gitmoji = match[1]
-                    const type = match[2]
-                    const scope = match[3]
-                    const subject = match[4]
-                    const allowed = new Set(['feat','fix','refactor','perf','revert'])
-                    if (!allowed.has(type)) return false
                     const scopes = [
                         ['root', ':file_folder: 根目录'],
                         ['web', ':laptop: 前端应用'],
@@ -113,7 +106,7 @@ module.exports = {
                     return internalCommit
                 },
                 headerPartial: '## [{{version}}]{{~#if title}} {{title}}{{~/if}} - {{date}}\n',
-                commitPartial: '- {{gitmoji}} {{type}}: {{subject}} {{~#if hash}} {{#if @root.linkReferences~}}([{{shortHash}}]({{~#if @root.repository}}{{~#if @root.host}}{{~@root.host}}/{{/if}}{{~#if @root.owner}}{{~@root.owner}}/{{/if}}{{~@root.repository}}/commit/{{hash}}{{~else}}{{~#if @root.repoUrl}}{{~@root.repoUrl}}/commit/{{hash}}{{~/if}}{{~/if}})){{~else}} {{~shortHash}}{{~/if}}{{~/if}}\n'
+                commitPartial: '- {{gitmoji}} {{subject}} {{~#if hash}} {{#if @root.linkReferences~}}([{{shortHash}}]({{~#if @root.repository}}{{~#if @root.host}}{{~@root.host}}/{{/if}}{{~#if @root.owner}}{{~@root.owner}}/{{/if}}{{~@root.repository}}/commit/{{hash}}{{~else}}{{~#if @root.repoUrl}}{{~@root.repoUrl}}/commit/{{hash}}{{~/if}}{{~/if}})){{~else}} {{~shortHash}}{{~/if}}{{~/if}}\n'
             }
         }
     }
