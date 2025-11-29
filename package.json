@@ -1,0 +1,17 @@
+{
+  "name": "dev-release",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.23.0",
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^10.0.2",
+    "release-it": "^19.0.6"
+  }
+}
