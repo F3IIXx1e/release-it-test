@@ -1,5 +1,11 @@
 # 版本变更记录 - 由 release-it 自动生成
 
+## :bookmark: [1.3.0-rc.1] - 2025/11/30
+
+### :file_folder: 根目录
+
+- :bug: 修复在 main 分支发布新版本 changelog 内容不符 873c920
+
 ## :bookmark: [1.3.0-rc.0] - 2025/11/30
 
 ### :file_folder: 根目录
