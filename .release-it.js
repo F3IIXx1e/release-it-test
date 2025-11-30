@@ -4,6 +4,26 @@ const branchEnv = process.env.GITHUB_REF_NAME || process.env.CI_COMMIT_REF_NAME 
 const branch = branchEnv || execSync('git branch --show-current').toString().trim()
 const preId = branch === 'dev' ? 'dev' : branch === 'test' ? 'rc' : ''
 const headerPattern = new RegExp(/^(:\w+:)\s+(\w+)\((\w+)\):\s+(.+)$/)
+// 获取最新的稳定版本标签
+const getLastStableTag = () => {
+    try {
+        const tags = execSync("git tag -l v* --sort=-version:refname")
+            .toString()
+            .split('\n')
+            .filter(t => !!t)
+        if (tags.length === 0) return null
+        return tags.find(t => !t.includes('-'))
+    } catch (_) {
+        return null
+    }
+}
+// 在 main 分支下才设置起始的 tag
+// 修复 main 分支发布新版本时, changelog 内容不符合预期
+const setGitRawCommitsOpts = () => {
+    if (branch !== 'main') return {}
+    const lastStableTag = getLastStableTag()
+    return lastStableTag ? { from: lastStableTag } : {}
+}
 
 /**
  * @type {import('release-it').Config}
@@ -33,6 +53,7 @@ module.exports = {
             infile: 'CHANGELOG.md',
             // 显示在 changelog 顶部的标题
             header: '# 版本变更记录 - 由 release-it 自动生成',
+            gitRawCommitsOpts: setGitRawCommitsOpts(),
             // 基础预设
             preset: {
                 name: 'conventionalcommits',
@@ -49,7 +70,7 @@ module.exports = {
                 let features = 0
                 let bugfixes = 0
 
-                commits.forEach((commit) => {
+                commits.forEach(commit => {
                     const match = headerPattern.exec(commit.header)
                     const commitType = match ? match[2] : undefined
                     if (commit.notes.length > 0) {
@@ -88,7 +109,7 @@ module.exports = {
                 },
                 transform: commit => {
                     const internalCommit = { ...commit }
-                    const [_, gitmoji, type, scope, subject] = headerPattern.exec(commit.header)
+                    const [_, gitmoji, type, scope, subject] = headerPattern.exec(internalCommit.header)
                     if (!['feat','fix','refactor','perf'].includes(type)) return false
                     // 对应 commitlint 配置中的 scopes
                     const scopes = [
