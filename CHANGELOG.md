@@ -1,5 +1,15 @@
 # 版本变更记录 - 由 release-it 自动生成
 
+## :bookmark: [1.3.0-rc.0] - 2025/11/30
+
+### :file_folder: 根目录
+
+- :sparkles: 根据分支自动设置预发布标识 d87ab9e
+- :bug: 修复 changelog 还包含 revert 类型的提交问题 cf84676
+- :bug: 修复 release-it 预发布版本后缀错误 18b7104
+- :bug: 修复发布提交和 tag 推送会再次触发工作流，造成二次运行 40457c1
+- :bug: 修复发布版本无法自动创建 release 092a3ab
+
 ## :bookmark: [1.3.0-dev.0] - 2025/11/30
 
 ### :file_folder: 根目录
