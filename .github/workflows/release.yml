@@ -2,9 +2,13 @@ name: Release
 
 permissions:
   contents: write
-  id-token: write
 
 on:
+  push:
+    branches:
+      - main
+      - dev
+      - test
   workflow_dispatch:
 
 jobs:
@@ -14,6 +18,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: true
 
       - name: git config
         run: |
