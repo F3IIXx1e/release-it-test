@@ -13,7 +13,7 @@ module.exports = {
     preRelease: preId || false,
     git: {
         tagName: 'v${version}',
-        commitMessage: ':bookmark: chore(release): 发布版本 v${version}',
+        commitMessage: ':bookmark: chore(release): 发布版本 v${version} [skip ci]',
         assets: ['CHANGELOG.md'],
         requireCleanWorkingDir: false,
         // 只允许 main dev test 分支提交时执行
