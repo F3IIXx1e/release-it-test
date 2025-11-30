@@ -24,6 +24,8 @@ module.exports = {
     },
     github: {
         release: true,
+        // 是否自动创建 GitHub Release
+        preRelease: !!preId
     },
     plugins: {
         '@release-it/conventional-changelog': {
